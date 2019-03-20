@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  jobappdb:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 1
+    ports:
+      - 5432:5432
+
+  jobapp:
+    build: ../JobsApp
+    ports:
+      - "5000:80"
+    depends_on:
+      - jobappdb
