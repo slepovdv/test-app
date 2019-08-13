@@ -166,3 +166,5 @@ $RECYCLE.BIN/
 /docker/MinniakhmetovDF.yml
 
 consul.local.json
+
+.code-workspace*
