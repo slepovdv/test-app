@@ -168,3 +168,4 @@ $RECYCLE.BIN/
 consul.local.json
 
 .code-workspace*
+.vscode
