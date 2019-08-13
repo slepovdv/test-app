@@ -5,13 +5,13 @@ services:
     container_name: app
     build: ./JobsApp/.
     ports:
-      - 5000:5000
+      - 5000:80
+    depends_on:
+      - database
   
   database:
     container_name: jobappdb
     image: postgres:9.6.15-alpine
-    ports:
-      - 5432
     environment:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
       POSTGRES_USER: $POSTGRES_USER
