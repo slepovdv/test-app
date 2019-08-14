@@ -18,7 +18,7 @@
           locations:
             app:
               location: /
-              proxy_pass: http://application
+              proxy_pass: http://application$request_uri
             monitoring:
               location: /grafana
               proxy_pass: http://grafana$request_uri
@@ -47,3 +47,4 @@
                 port: 3000
                 weight: 1
                 health_check: max_fails=3 fail_timeout=5s
+                

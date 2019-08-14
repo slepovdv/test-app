@@ -1,0 +1,39 @@
+global:
+
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+# rule_files:
+#  - 'alerts.yml'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    basic_auth:
+      username: 'admin'
+      password: '84cvb'
+    static_configs:
+      - targets: ['prometheus:9090']
+        labels:
+          group: 'prometheus'
+  
+  - job_name: "node"
+    scrape_interval: "5s"
+    static_configs:
+      - targets: ['node_exporter':9100']
+        labels:
+          group: 'node_exporter'
+  
+  - job_name: "container"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:8090']
+        labels:
+          group: 'cadvisor'
+
+
+
+#alerting:
+#  alertmanagers:
+#    - static_configs:
+#      - targets: 
+#        - alertmanager:9093
