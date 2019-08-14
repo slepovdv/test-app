@@ -16,34 +16,34 @@
         autoindex: false
         reverse_proxy:
           locations:
-            frontend:
+            app:
               location: /
-              proxy_pass: http://frontend_servers
-            backend:
-              location: /backend
-              proxy_pass: http://backend_servers
+              proxy_pass: http://application
+            monitoring:
+              location: /grafana
+              proxy_pass: http://grafana$request_uri
         upstreams:
           upstream_1:
-            name: frontend_servers
+            name: application 
             lb_method: least_conn
-            zone_name: frontend
+            zone_name: app
             zone_size: 64k
             sticky_cookie: false
             servers:
-              frontend_server_1:
+              app_server_1:
                 address: localhost
-                port: 80
+                port: 5000
                 weight: 1
                 health_check: max_fails=3 fail_timeout=5s
           upstream_2:
-            name: backend_servers
+            name: grafana
             lb_method: least_conn
-            zone_name: backend
+            zone_name: monitoring
             zone_size: 64k
             sticky_cookie: false
             servers:
-              backend_server_1:
+              monitoring_server_1:
                 address: localhost
-                port: 8080
+                port: 3000
                 weight: 1
                 health_check: max_fails=3 fail_timeout=5s
