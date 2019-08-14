@@ -20,6 +20,6 @@
         /// <summary>
         /// Признак того что оклад указан до вычета налогов
         /// </summary>
-        public bool Gross { get; set; }
+        public bool? Gross { get; set; }
     }
 }
