@@ -35,9 +35,9 @@ services:
       - "pmdata:/prometheus"
       - "./config/prometheus:/etc/prometheus/"
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=7d'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=7d"
 
   grafana:
     image: grafana/grafana:6.3.2
@@ -45,13 +45,49 @@ services:
     restart: on-failure
     volumes:
       - "grdata:/var/lib/grafana"
-      - "./config/grafana/provisioning:/etc/grafana/provisioning/"
+      - "./config/grafana/provisioning:/etc/grafana/provisioning"
     ports:
       - "3000:3000"   
     depends_on:
       - prometheus
     env_file:
-      - 'env.grafana' 
+      - "./env.grafana"
+      
+  nodeexporter:
+    container_name: nodeexporter
+    image: prom/node-exporter:v0.18.1
+    restart: on-failure
+    volumes:
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/:/rootfs:ro,rslave"
+    command:
+      - "--path.rootfs=/rootfs" 
+      - "--path.procfs=/host/proc" 
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points"
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    
+  cadvisor:
+    image: google/cadvisor:v0.33.0
+    container_name: cadvisor
+    command: -storage_driver=influxdb -storage_driver_db=cadvisor
+    volumes:
+    - "/:/rootfs:ro"
+    - "/var/run:/var/run:rw"
+    - "/sys:/sys:ro"
+    - "/var/lib/docker/:/var/lib/docker:ro"
+    depends_on:
+      - prometheus
+
+  postgresexporter:
+    container_name: postgresexporter
+    image: wrouesnel/postgres_exporter:v0.5.1
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATA_SOURCE_NAME: postgresql://postgres:1@jobappdb:5432/postgres?sslmode=disable
+
 
 volumes:
   pgdata:
