@@ -29,6 +29,11 @@ scrape_configs:
     static_configs:
       - targets: ['postgresexporter:9187']
 
+  - job_name: "nginxexporter"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['nginxexporter:9397']
+
 #alerting:
 #  alertmanagers:
 #    - static_configs:

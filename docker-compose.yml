@@ -1,4 +1,4 @@
-version: "2.4"
+version: "2.2"
 
 services:
   jobapp:
@@ -24,8 +24,8 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
-      timeout: 3s
-      retries: 5
+      timeout: 10s
+      retries: 10
   
   prometheus:
     container_name: prometheus
@@ -39,7 +39,7 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=7d"
+      - "--storage.tsdb.retention.time=3d"
 
   grafana:
     image: grafana/grafana:6.3.2
@@ -94,19 +94,40 @@ services:
       - 9187
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      DATA_SOURCE_NAME: postgresql://postgres:1@jobappdb:5432/postgres?sslmode=disable
+      DATA_SOURCE_NAME: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@jobappdb:5432/postgres?sslmode=disable
 
   nginx:
     container_name: nginx
-    image: nginx
-    build: ./images/nginx/
+    image: nginx:1.17.3-alpine
     restart: on-failure
+    expose:
+      - 80
+      - 8888
     ports:
       - "80:80"
     depends_on:
       - grafana
       - jobapp
-
+    volumes:
+      - mtaildata:/var/log/nginx/mtail
+      - ./config/nginx:/etc/nginx
+  
+  nginxexporter:
+    container_name: nginxexporter
+    build: ./images/nginx-exporter/
+    restart: on-failure
+    environment:
+      NGINX_ACCESS_LOGS: ${NGINX_ACCESS_LOGS}
+      NGINX_STATUS_URI: ${NGINX_STATUS_URI}
+    ports: 
+      - 3093:3093
+    volumes:
+      - mtaildata:/var/log/nginx/mtail:ro
+    expose:
+      - 9397
+    depends_on:
+      - nginx
+   
 
 
 volumes:
@@ -115,4 +136,6 @@ volumes:
   pmdata:
     external: true
   grdata:
+    external: true
+  mtaildata:
     external: true
