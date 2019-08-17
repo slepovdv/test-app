@@ -14,10 +14,10 @@
     },
     "description": "Shows stats built from the Prometheus Nginx mtail log exporter rebuy-de/nginx-exporter or ndiazg/nginx-prometheus-exporter.",
     "editable": true,
-    "gnetId": 9521,
+    "gnetId": 9516,
     "graphTooltip": 0,
-    "id": 5,
-    "iteration": 1565983639055,
+    "id": 4,
+    "iteration": 1566009173259,
     "links": [],
     "panels": [
       {
@@ -26,123 +26,19 @@
         "dashLength": 10,
         "dashes": false,
         "datasource": "$datasource",
-        "editable": true,
-        "error": false,
         "fill": 1,
         "fillGradient": 0,
-        "grid": {},
         "gridPos": {
           "h": 7,
-          "w": 10,
+          "w": 11,
           "x": 0,
-          "y": 0
-        },
-        "id": 1,
-        "isNew": true,
-        "legend": {
-          "avg": false,
-          "current": false,
-          "hideEmpty": true,
-          "hideZero": true,
-          "max": false,
-          "min": false,
-          "show": true,
-          "total": false,
-          "values": false
-        },
-        "lines": true,
-        "linewidth": 2,
-        "links": [],
-        "nullPointMode": "connected",
-        "options": {
-          "dataLinks": []
-        },
-        "percentage": false,
-        "pointradius": 5,
-        "points": false,
-        "renderer": "flot",
-        "seriesOverrides": [],
-        "spaceLength": 10,
-        "stack": false,
-        "steppedLine": false,
-        "targets": [
-          {
-            "expr": "sum(irate(nginx_requests_total{namespace=~\"$namespace\",vhost=~\"$vhost\",code=~\"$code\",host!=\"127.0.0.1\"}[5m])) by (code)",
-            "format": "time_series",
-            "hide": false,
-            "interval": "1000ms",
-            "intervalFactor": 1,
-            "legendFormat": "{{code}}",
-            "metric": "nginx_http_requests_total",
-            "refId": "B",
-            "step": 1
-          }
-        ],
-        "thresholds": [],
-        "timeFrom": null,
-        "timeRegions": [],
-        "timeShift": null,
-        "title": "HTTP Responses",
-        "tooltip": {
-          "msResolution": false,
-          "shared": true,
-          "sort": 0,
-          "value_type": "cumulative"
-        },
-        "type": "graph",
-        "xaxis": {
-          "buckets": null,
-          "mode": "time",
-          "name": null,
-          "show": true,
-          "values": []
-        },
-        "yaxes": [
-          {
-            "format": "short",
-            "label": null,
-            "logBase": 1,
-            "max": null,
-            "min": 0,
-            "show": true
-          },
-          {
-            "format": "short",
-            "label": null,
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true
-          }
-        ],
-        "yaxis": {
-          "align": false,
-          "alignLevel": null
-        }
-      },
-      {
-        "aliasColors": {},
-        "bars": false,
-        "dashLength": 10,
-        "dashes": false,
-        "datasource": "$datasource",
-        "editable": true,
-        "error": false,
-        "fill": 1,
-        "fillGradient": 0,
-        "grid": {},
-        "gridPos": {
-          "h": 7,
-          "w": 10,
-          "x": 10,
           "y": 0
         },
         "id": 2,
-        "isNew": true,
         "legend": {
           "avg": false,
           "current": false,
-          "hideEmpty": true,
+          "hideEmpty": false,
           "hideZero": true,
           "max": false,
           "min": false,
@@ -151,9 +47,9 @@
           "values": false
         },
         "lines": true,
-        "linewidth": 2,
+        "linewidth": 1,
         "links": [],
-        "nullPointMode": "connected",
+        "nullPointMode": "null",
         "options": {
           "dataLinks": []
         },
@@ -167,26 +63,22 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(irate(nginx_requests_total{namespace=~\"$namespace\",vhost=~\"$vhost\",code=~\"$code\",host!=\"127.0.0.1\"}[5m])) by (vhost,code)",
+            "expr": "sum(rate(nginx_request_duration_milliseconds_sum{namespace=~\"$namespace\",app=~\"$app\"}[5m])) by (namespace, app) / sum(rate(nginx_request_duration_milliseconds_count{namespace=~\"$namespace\",app=~\"$app\"}[5m])) by (namespace, app)",
             "format": "time_series",
-            "interval": "",
-            "intervalFactor": 2,
-            "legendFormat": "{{code}} {{vhost}}",
-            "metric": "nginx_http_requests_total",
-            "refId": "A",
-            "step": 10
+            "intervalFactor": 1,
+            "legendFormat": "response time",
+            "refId": "A"
           }
         ],
         "thresholds": [],
         "timeFrom": null,
         "timeRegions": [],
         "timeShift": null,
-        "title": "HTTP Requests By Host",
+        "title": "Average Response Time",
         "tooltip": {
-          "msResolution": false,
           "shared": true,
           "sort": 0,
-          "value_type": "cumulative"
+          "value_type": "individual"
         },
         "type": "graph",
         "xaxis": {
@@ -198,11 +90,11 @@
         },
         "yaxes": [
           {
-            "format": "short",
+            "format": "ms",
             "label": null,
             "logBase": 1,
             "max": null,
-            "min": 0,
+            "min": null,
             "show": true
           },
           {
@@ -220,89 +112,93 @@
         }
       },
       {
-        "cacheTimeout": null,
-        "colorBackground": false,
-        "colorValue": true,
-        "colors": [
-          "rgba(245, 54, 54, 0.9)",
-          "rgba(237, 129, 40, 0.89)",
-          "rgba(50, 172, 45, 0.97)"
-        ],
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
         "datasource": "$datasource",
-        "editable": true,
-        "error": false,
-        "format": "none",
-        "gauge": {
-          "maxValue": 1,
-          "minValue": 0,
-          "show": false,
-          "thresholdLabels": false,
-          "thresholdMarkers": true
-        },
+        "fill": 1,
+        "fillGradient": 0,
         "gridPos": {
           "h": 7,
-          "w": 4,
-          "x": 20,
+          "w": 11,
+          "x": 11,
           "y": 0
         },
-        "id": 7,
-        "interval": null,
-        "isNew": true,
-        "links": [],
-        "mappingType": 1,
-        "mappingTypes": [
-          {
-            "name": "value to text",
-            "value": 1
-          },
-          {
-            "name": "range to text",
-            "value": 2
-          }
-        ],
-        "maxDataPoints": 100,
-        "nullPointMode": "connected",
-        "nullText": null,
-        "options": {},
-        "postfix": "",
-        "postfixFontSize": "50%",
-        "prefix": "",
-        "prefixFontSize": "50%",
-        "rangeMaps": [
-          {
-            "from": "null",
-            "text": "N/A",
-            "to": "null"
-          }
-        ],
-        "sparkline": {
-          "fillColor": "rgba(31, 118, 189, 0.18)",
-          "full": false,
-          "lineColor": "rgb(31, 120, 193)",
-          "show": true
+        "id": 4,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
         },
-        "tableColumn": "",
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
         "targets": [
           {
-            "expr": "(sum(rate(nginx_request_duration_milliseconds_bucket{namespace=~\"$namespace\",vhost=\"$vhost\",host!=\"127.0.0.1\",le=\"100\"}[1m]))+sum(rate(nginx_request_duration_milliseconds_bucket{namespace=~\"$namespace\",vhost=\"$vhost\",host!=\"127.0.0.1\",le=\"200\"}[1m]))) / 2 / sum(rate(nginx_request_duration_milliseconds_count{namespace=~\"$namespace\",vhost=\"$vhost\",host!=\"127.0.0.1\"}[1m]))",
+            "expr": "sum(rate(nginx_request_duration_milliseconds_count{namespace=~\"$namespace\",app=~\"$app\"}[1m])) by (namespace, app)",
             "format": "time_series",
-            "intervalFactor": 2,
-            "refId": "A",
-            "step": 60
+            "intervalFactor": 1,
+            "legendFormat": "request",
+            "refId": "A"
           }
         ],
-        "thresholds": "0.9,0.97",
-        "title": "Apdex",
-        "type": "singlestat",
-        "valueFontSize": "80%",
-        "valueMaps": [
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Requests per Second",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
           {
-            "op": "=",
-            "text": "N/A",
-            "value": "null"
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": false
           }
         ],
-        "valueName": "avg"
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
       },
       {
         "aliasColors": {},
@@ -310,34 +206,28 @@
         "dashLength": 10,
         "dashes": false,
         "datasource": "$datasource",
-        "editable": true,
-        "error": false,
         "fill": 1,
         "fillGradient": 0,
-        "grid": {},
         "gridPos": {
           "h": 7,
-          "w": 10,
+          "w": 11,
           "x": 0,
           "y": 7
         },
-        "id": 3,
-        "isNew": true,
+        "id": 10,
         "legend": {
-          "alignAsTable": true,
-          "avg": true,
-          "current": true,
-          "max": true,
-          "min": true,
-          "rightSide": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
           "show": true,
           "total": false,
-          "values": true
+          "values": false
         },
         "lines": true,
-        "linewidth": 2,
+        "linewidth": 1,
         "links": [],
-        "nullPointMode": "connected",
+        "nullPointMode": "null",
         "options": {
           "dataLinks": []
         },
@@ -351,25 +241,22 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(rate(nginx_request_duration_milliseconds_sum{namespace=~\"$namespace\",vhost=~\"$vhost\",host!=\"127.0.0.1\"}[1m])) / sum(rate(nginx_request_duration_milliseconds_count{namespace=~\"$namespace\",vhost=~\"$vhost\",host!=\"127.0.0.1\"}[1m]))",
+            "expr": "sum(rate(nginx_request_duration_milliseconds_count{namespace=~\"$namespace\",app=~\"$app\"}[1m])) by (code)",
             "format": "time_series",
-            "hide": false,
-            "intervalFactor": 2,
-            "legendFormat": "milliseconds",
-            "refId": "C",
-            "step": 10
+            "intervalFactor": 1,
+            "legendFormat": "{{code}}",
+            "refId": "A"
           }
         ],
         "thresholds": [],
         "timeFrom": null,
         "timeRegions": [],
         "timeShift": null,
-        "title": "Response Time",
+        "title": "Status codes per second",
         "tooltip": {
-          "msResolution": false,
           "shared": true,
           "sort": 0,
-          "value_type": "cumulative"
+          "value_type": "individual"
         },
         "type": "graph",
         "xaxis": {
@@ -381,11 +268,11 @@
         },
         "yaxes": [
           {
-            "format": "ms",
+            "format": "short",
             "label": null,
             "logBase": 1,
             "max": null,
-            "min": 0,
+            "min": null,
             "show": true
           },
           {
@@ -408,33 +295,30 @@
         "dashLength": 10,
         "dashes": false,
         "datasource": "$datasource",
-        "editable": true,
-        "error": false,
+        "description": "Response sizes in bytes",
         "fill": 1,
         "fillGradient": 0,
-        "grid": {},
         "gridPos": {
           "h": 7,
-          "w": 10,
-          "x": 10,
+          "w": 11,
+          "x": 11,
           "y": 7
         },
-        "id": 4,
-        "isNew": true,
+        "id": 8,
         "legend": {
-          "alignAsTable": true,
-          "avg": true,
-          "current": true,
-          "max": true,
-          "min": true,
+          "avg": false,
+          "current": false,
+          "hideEmpty": true,
+          "max": false,
+          "min": false,
           "show": true,
           "total": false,
-          "values": true
+          "values": false
         },
         "lines": true,
-        "linewidth": 2,
+        "linewidth": 1,
         "links": [],
-        "nullPointMode": "connected",
+        "nullPointMode": "null",
         "options": {
           "dataLinks": []
         },
@@ -448,24 +332,22 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(rate(nginx_request_duration_milliseconds_sum{vhost=\"$vhost\",host!=\"127.0.0.1\"}[1m])) by (vhost) / sum(rate(nginx_request_duration_milliseconds_count{vhost=\"$vhost\",host!=\"127.0.0.1\"}[1m])) by (vhost)",
+            "expr": "sum(rate(nginx_response_size_bytes_sum{namespace=~\"$namespace\",app=~\"$app\"}[5m])) by (namespace, app)",
             "format": "time_series",
-            "intervalFactor": 2,
-            "legendFormat": "{{vhost}}",
-            "refId": "A",
-            "step": 10
+            "intervalFactor": 1,
+            "legendFormat": "traffic bytes",
+            "refId": "A"
           }
         ],
         "thresholds": [],
         "timeFrom": null,
         "timeRegions": [],
         "timeShift": null,
-        "title": "Response time by Host",
+        "title": "HTTP Traffic",
         "tooltip": {
-          "msResolution": false,
           "shared": true,
           "sort": 0,
-          "value_type": "cumulative"
+          "value_type": "individual"
         },
         "type": "graph",
         "xaxis": {
@@ -477,11 +359,11 @@
         },
         "yaxes": [
           {
-            "format": "ms",
+            "format": "decbytes",
             "label": null,
             "logBase": 1,
             "max": null,
-            "min": 0,
+            "min": null,
             "show": true
           },
           {
@@ -490,101 +372,16 @@
             "logBase": 1,
             "max": null,
             "min": null,
-            "show": true
+            "show": false
           }
         ],
         "yaxis": {
           "align": false,
           "alignLevel": null
         }
-      },
-      {
-        "cacheTimeout": null,
-        "colorBackground": false,
-        "colorValue": true,
-        "colors": [
-          "rgba(245, 54, 54, 0.9)",
-          "rgba(237, 129, 40, 0.89)",
-          "rgba(50, 172, 45, 0.97)"
-        ],
-        "datasource": "$datasource",
-        "editable": true,
-        "error": false,
-        "format": "none",
-        "gauge": {
-          "maxValue": 1,
-          "minValue": 0,
-          "show": false,
-          "thresholdLabels": false,
-          "thresholdMarkers": true
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 4,
-          "x": 20,
-          "y": 7
-        },
-        "id": 8,
-        "interval": null,
-        "isNew": true,
-        "links": [],
-        "mappingType": 1,
-        "mappingTypes": [
-          {
-            "name": "value to text",
-            "value": 1
-          },
-          {
-            "name": "range to text",
-            "value": 2
-          }
-        ],
-        "maxDataPoints": 100,
-        "nullPointMode": "connected",
-        "nullText": null,
-        "options": {},
-        "postfix": "",
-        "postfixFontSize": "50%",
-        "prefix": "",
-        "prefixFontSize": "50%",
-        "rangeMaps": [
-          {
-            "from": "null",
-            "text": "N/A",
-            "to": "null"
-          }
-        ],
-        "sparkline": {
-          "fillColor": "rgba(31, 118, 189, 0.18)",
-          "full": false,
-          "lineColor": "rgb(31, 120, 193)",
-          "show": true
-        },
-        "tableColumn": "",
-        "targets": [
-          {
-            "expr": "count(sum(nginx_request_duration_milliseconds_count{host!=\"127.0.0.1\",vhost=\"$vhost\"}) by (vhost))",
-            "format": "time_series",
-            "intervalFactor": 2,
-            "refId": "A",
-            "step": 60
-          }
-        ],
-        "thresholds": "0,.9",
-        "title": "Hosts",
-        "type": "singlestat",
-        "valueFontSize": "80%",
-        "valueMaps": [
-          {
-            "op": "=",
-            "text": "N/A",
-            "value": "null"
-          }
-        ],
-        "valueName": "avg"
       }
     ],
-    "refresh": "30s",
+    "refresh": "10s",
     "schemaVersion": 19,
     "style": "dark",
     "tags": [
@@ -613,7 +410,6 @@
         {
           "allValue": ".*",
           "current": {
-            "tags": [],
             "text": "All",
             "value": "$__all"
           },
@@ -637,32 +433,6 @@
           "useTags": false
         },
         {
-          "allValue": null,
-          "current": {
-            "tags": [],
-            "text": "kunslepov.me",
-            "value": "kunslepov.me"
-          },
-          "datasource": "$datasource",
-          "definition": "",
-          "hide": 0,
-          "includeAll": false,
-          "label": null,
-          "multi": false,
-          "name": "vhost",
-          "options": [],
-          "query": "label_values(nginx_request_duration_milliseconds_count{namespace=~\"$namespace\"}, vhost)",
-          "refresh": 1,
-          "regex": "",
-          "skipUrlSync": false,
-          "sort": 0,
-          "tagValuesQuery": "",
-          "tags": [],
-          "tagsQuery": "",
-          "type": "query",
-          "useTags": false
-        },
-        {
           "allValue": ".*",
           "current": {
             "text": "All",
@@ -672,15 +442,15 @@
           "definition": "",
           "hide": 0,
           "includeAll": true,
-          "label": "response_code",
-          "multi": true,
-          "name": "code",
+          "label": "",
+          "multi": false,
+          "name": "app",
           "options": [],
-          "query": "label_values(nginx_request_duration_milliseconds_count, code)",
-          "refresh": 1,
+          "query": "label_values(nginx_up{namespace=~\"$namespace\"}, app)",
+          "refresh": 2,
           "regex": "",
           "skipUrlSync": false,
-          "sort": 0,
+          "sort": 1,
           "tagValuesQuery": "",
           "tags": [],
           "tagsQuery": "",
@@ -690,7 +460,7 @@
       ]
     },
     "time": {
-      "from": "now-1h",
+      "from": "now-15m",
       "to": "now"
     },
     "timepicker": {
@@ -719,7 +489,7 @@
       ]
     },
     "timezone": "browser",
-    "title": "Nginx Responses Overview",
-    "uid": "B2yNwiEmz",
-    "version": 1
+    "title": "Nginx General Overview",
+    "uid": "4aBQsjSmz",
+    "version": 2
   }
